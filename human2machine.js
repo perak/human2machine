@@ -1,5 +1,11 @@
 #! /usr/bin/env node
 
+/*
+  Human to machine converter - written in rush by Petar Korponaić <petar.korponaic@gmail.com>
+
+  Stay tuned: more functionality, docs and code comments will be added soon (4AM here :)
+*/
+
 var _ = require("underscore");
 var util = require('util');
 var fs = require('fs');

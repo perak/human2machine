@@ -30,5 +30,3 @@ That's it, please create this application for me.
 Thank you.
 Petar
 ```
-
-That's it for now.
