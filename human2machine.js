@@ -82,6 +82,7 @@ function bakeApp(input) {
     var res = str.match(new RegExp('(?!' + ch + '|$)[^' + ch + '"]*(("[^"]*")[^' + ch + '"]*)*', 'g'));
     return res || [];
   };
+
   var equal = function(str1, str2) {
     if(str1 && str2) return str1.toUpperCase() == str2.toUpperCase();
 
@@ -111,6 +112,13 @@ function bakeApp(input) {
         res.push(l.trim().replace(/\W+\s/g, ''));
     });
     return res;
+  };
+
+  var findWord = function(str, word) {
+    var words = splitStr(str, " ");
+    var index = -1;
+    _.find(words, function(w, i) { if(w == word) { index = i; return true; } else return false; });
+    return index;
   };
 
   var getWordAfterWord = function(str, word) {
@@ -210,6 +218,7 @@ function bakeApp(input) {
     output.application.free_zone.pages = [];
 
     _.each(pageNames, function(pageName) {
+        if(pageName == "page0") pageName = "home";
         var name = pageName.replace(" ", "_").replace("-", "_");
         var title = toTitleCase(pageName);
 
@@ -264,6 +273,35 @@ function bakeApp(input) {
     });
   };
 
+  var connectCollectionToMosquitto = function(sentence) {
+    var collectionName = getWordBetweenWords(sentence, "connect", "collection");
+    var collection = getOutputCollection(collectionName);
+
+    if(!collection) return;
+
+    if(findWord(sentence, "mosquitto") < 0) return;
+
+    var url = getQuotedStringAfterSubString(sentence, "server:");
+    if(!url) return;
+
+    if(findSubString(url, "//") < 0) url = "mqtt://" + url;
+
+    var topics = getListAfterSubstring(sentence, "topic:", "topics:");
+
+    var startupCode = output.application.server_startup_code || "";
+    var top = "";
+    _.each(topics, function(t) {
+        if(top) top = top + ", ";
+        top = top + "'" + t + "'";
+    });
+    startupCode = startupCode + toTitleCase(collectionName) + ".mqttConnect('" + url + "', [" + top + "]);";
+    output.application.server_startup_code = startupCode;
+
+    output.application.packages = output.application.packages || {};
+    output.application.packages.meteor = output.application.packages.meteor || [];
+    if(output.application.packages.meteor.indexOf("perak:mqtt-collection") < 0) output.application.packages.meteor.push("perak:mqtt-collection");
+  };
+
   var addJumbotronToPage = function(sentence, page) {
     var title = getQuotedStringAfterSubString(sentence, "title:");
     var text = getQuotedStringAfterSubString(sentence, "text:");
@@ -281,6 +319,24 @@ function bakeApp(input) {
     };
     page.components.push(jumbotron);
     page.title = "";
+  };
+
+  var addDataviewToPage = function(sentence, page) {
+    var collectionName = getWordBetweenWords(sentence, "for", "collection");
+    if(!getOutputCollection(collectionName)) return;
+
+    var dataView = {
+      name: "list",
+      type: "dataview",
+      query: {
+        name: collectionName,
+        collection: collectionName,
+        filter: {},
+        options: {}
+      }
+    };
+
+    page.components.push(dataView);
   };
 
   var addCrudToPage = function(sentence, page) {
@@ -352,7 +408,6 @@ function bakeApp(input) {
   var addComponentsToPage = function(sentence) {
       var pageName = getWordBetweenWords(sentence, "in", "page");
       if(!pageName) return;
-
       var page = getOutputPage(pageName);
       if(!page) {
         if(pageName == "home") page = getOutputPage("home_page");
@@ -363,6 +418,9 @@ function bakeApp(input) {
       if(findSubString(sentence, "jumbotron") >= 0) {
           addJumbotronToPage(sentence, page);
       } else {
+        if(findSubString(sentence, "table") >= 0) {
+            addDataviewToPage(sentence, page);
+        } else {
           if(findSubString(sentence, "crud") >= 0) {
               addCrudToPage(sentence, page);
           } else {
@@ -370,6 +428,7 @@ function bakeApp(input) {
                 page.text = getQuotedStringAfterSubString(sentence, "text");
             }
           }
+        }
       }
   };
 
@@ -377,6 +436,7 @@ function bakeApp(input) {
   _.each(sentences, function(sentence) {
     createCollections(sentence);
     addFieldsToCollection(sentence);
+    connectCollectionToMosquitto(sentence);
     createPages(sentence);
     addComponentsToPage(sentence);
   });
@@ -388,7 +448,7 @@ fs.readFile(args[0], {encoding: 'utf-8'}, function(err, data) {
       var output = bakeApp(data);
 
       if(args.length < 2) {
-        console.log(util.inspect(output, false, null));
+        console.log(JSON.stringify(output, null, "\t"));
       } else {
         fs.writeFile(args[1], JSON.stringify(output, null, "\t"), function(err) {
             if(err) {
