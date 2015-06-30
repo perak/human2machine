@@ -46,4 +46,4 @@ Connect sensors collection to mosquitto server: "test.mosquitto.org" and subscri
 In home page I want table for sensors collection.
 ```
 
-Live application is <a href="http://example-human-iot.meteor.com" target="_blank">here</a>.
+Live application is <a href="http://generator-human-iot.meteor.com" target="_blank">here</a>.
