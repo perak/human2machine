@@ -323,7 +323,12 @@ function bakeApp(input) {
 
   var addDataviewToPage = function(sentence, page) {
     var collectionName = getWordBetweenWords(sentence, "for", "collection");
-    if(!getOutputCollection(collectionName)) return;
+    if(!collectionName || !getOutputCollection(collectionName)) {
+      collectionName = getWordBetweenWords(sentence, "showing", "collection");
+      if(!getOutputCollection(collectionName)) {
+        return;
+      }
+    }
 
     var dataView = {
       name: "list",

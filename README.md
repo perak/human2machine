@@ -33,7 +33,8 @@ That's it, please create this application for me.
 Thank you.
 Petar
 ```
-Live application is <a href="http://example-human.meteor.com" target="_blank">here</a>.
+
+Live application is <a href="http://generator-human.meteor.com" target="_blank">here</a>.
 
 
 ### Example 2 - IoT
@@ -43,7 +44,7 @@ I want site with one page.
 Create one collection: sensors.
 In sensors collection I want fields: topic and message.
 Connect sensors collection to mosquitto server: "test.mosquitto.org" and subscribe to topic: revspace/sensors/#.
-In home page I want table for sensors collection.
+In home page I want table showing sensors collection.
 ```
 
 Live application is <a href="http://generator-human-iot.meteor.com" target="_blank">here</a>.
