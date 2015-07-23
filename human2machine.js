@@ -376,7 +376,8 @@ function bakeApp(input) {
         name: collectionName + "_empty",
         collection: collectionName,
         filter: { _id: null },
-        options: {}
+        options: {},
+        find_one: true
       },
       submit_route: page.name,
       cancel_route: page.name
@@ -398,7 +399,8 @@ function bakeApp(input) {
         name: collectionName + "_selected",
         collection: collectionName,
         filter: { _id: ":customerId" },
-        options: {}
+        options: {},
+        find_one: true
       },
       submit_route: page.name,
       cancel_route: page.name
