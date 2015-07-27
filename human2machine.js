@@ -25,9 +25,10 @@ var output = {
 
     free_zone: {
       pages: [],
-      menus: [
+      components: [
         {
           name: "main_menu",
+          type: "menu",
           class: "nav navbar-nav",
 					items: [
           ]
@@ -226,11 +227,10 @@ function bakeApp(input) {
             name: name,
             title: title,
             pages: [],
-            menus: [],
             components: []
         });
 
-        output.application.free_zone.menus[0].items.push({
+        output.application.free_zone.components[0].items.push({
             title: title,
             route: name
         });
