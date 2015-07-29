@@ -1,6 +1,6 @@
 {
   "name": "human2machine",
-  "version": "1.0.6",
+  "version": "1.0.7",
   "description": "Translates app description written in human language to meteor-kitchen input .json",
   "main": "human2machine.js",
   "scripts": {
@@ -15,7 +15,7 @@
   ],
   "preferGlobal": "true",
   "bin": {
-    "human2machine" : "human2machine.js"
+    "human2machine" : "cli.js"
   },
   "author": "Petar Korponaić <petar.korponaic@gmail.com> (http://perak.github.io/)",
   "license": "MIT",

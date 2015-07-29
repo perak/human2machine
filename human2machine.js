@@ -1,23 +1,4 @@
-#! /usr/bin/env node
-
-/*
-  Human to machine converter - written in rush by Petar Korponaić <petar.korponaic@gmail.com>
-
-  Stay tuned: more functionality, docs and code comments will be added soon (4AM here :)
-*/
-
 var _ = require("underscore");
-var util = require('util');
-var fs = require('fs');
-var path = require('path');
-
-var args = process.argv.slice(2);
-
-if(args.length < 1) {
-  console.log("Invalid arguments.");
-  console.log("Please provide at least input file (output file is optional).");
-  process.exit(1);
-}
 
 var output = {
   application: {
@@ -46,7 +27,7 @@ var getOutputCollection = function(collectionName) {
   return _.find(output.application.collections, function(collection) { return collection.name == collectionName; });
 };
 
-function bakeApp(input) {
+exports.human2machine = function(input) {
   var numbers = {
       'one': 1,
       'two': 2,
@@ -449,24 +430,3 @@ function bakeApp(input) {
   });
   return output;
 }
-
-fs.readFile(args[0], {encoding: 'utf-8'}, function(err, data) {
-    if(!err) {
-      var output = bakeApp(data);
-
-      if(args.length < 2) {
-        console.log(JSON.stringify(output, null, "\t"));
-      } else {
-        fs.writeFile(args[1], JSON.stringify(output, null, "\t"), function(err) {
-            if(err) {
-              console.log(err);
-              process.exit(1);
-            }
-            console.log("OK");
-        });
-      }
-    } else {
-      console.log(err);
-      process.exit(1);
-    }
-});
