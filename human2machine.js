@@ -1,6 +1,6 @@
-var _ = require("underscore");
+if(typeof require != "undefined") _ = require("underscore");
 
-exports.human2machine = function(input) {
+human2machine = function(input) {
   var output = {
     application: {
       collections: [],
@@ -430,3 +430,6 @@ exports.human2machine = function(input) {
   });
   return output;
 }
+
+exports = exports || {};
+exports.human2machine = human2machine;
