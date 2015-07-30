@@ -1,33 +1,33 @@
 var _ = require("underscore");
 
-var output = {
-  application: {
-    collections: [],
-
-    free_zone: {
-      pages: [],
-      components: [
-        {
-          name: "main_menu",
-          type: "menu",
-          class: "nav navbar-nav",
-					items: [
-          ]
-        }
-      ]
-    }
-  }
-};
-
-var getOutputPage = function(pageName) {
-  return _.find(output.application.free_zone.pages, function(page) { return page.name == pageName; });
-};
-
-var getOutputCollection = function(collectionName) {
-  return _.find(output.application.collections, function(collection) { return collection.name == collectionName; });
-};
-
 exports.human2machine = function(input) {
+  var output = {
+    application: {
+      collections: [],
+
+      free_zone: {
+        pages: [],
+        components: [
+          {
+            name: "main_menu",
+            type: "menu",
+            class: "nav navbar-nav",
+            items: [
+            ]
+          }
+        ]
+      }
+    }
+  };
+
+  var getOutputPage = function(pageName) {
+    return _.find(output.application.free_zone.pages, function(page) { return page.name == pageName; });
+  };
+
+  var getOutputCollection = function(collectionName) {
+    return _.find(output.application.collections, function(collection) { return collection.name == collectionName; });
+  };
+
   var numbers = {
       'one': 1,
       'two': 2,
