@@ -4,6 +4,7 @@ human2machine = function(input) {
   var output = {
     application: {
       collections: [],
+      queries: [],
 
       free_zone: {
         pages: [],
@@ -26,6 +27,10 @@ human2machine = function(input) {
 
   var getOutputCollection = function(collectionName) {
     return _.find(output.application.collections, function(collection) { return collection.name == collectionName; });
+  };
+
+  var getOutputQuery = function(queryName) {
+    return _.find(output.application.queries, function(query) { return query.name == queryName; });
   };
 
   var numbers = {
@@ -311,15 +316,23 @@ human2machine = function(input) {
       }
     }
 
-    var dataView = {
-      name: "list",
-      type: "dataview",
-      query: {
-        name: collectionName,
+    var queryName = collectionName;
+    var query = getOutputQuery(queryName);
+    if(!query) {
+      query = {
+        name: queryName,
         collection: collectionName,
         filter: {},
         options: {}
-      }
+      };
+      
+      output.application.queries.push(query);
+    }
+
+    var dataView = {
+      name: "list",
+      type: "dataview",
+      query_name: queryName
     };
 
     page.components.push(dataView);
@@ -329,15 +342,51 @@ human2machine = function(input) {
     var collectionName = getWordBetweenWords(sentence, "for", "collection");
     if(!getOutputCollection(collectionName)) return;
 
-    var dataView = {
-      name: "list",
-      type: "dataview",
-      query: {
-        name: collectionName,
+    var viewQueryName = collectionName;
+    var viewQuery = getOutputQuery(viewQueryName);
+    if(!viewQuery) {
+      viewQuery = {
+        name: viewQueryName,
         collection: collectionName,
         filter: {},
         options: {}
-      },
+      };
+      
+      output.application.queries.push(viewQuery);
+    }
+
+    var insertQueryName = collectionName + "_empty";
+    var insertQuery = getOutputQuery(insertQueryName);
+    if(!insertQuery) {
+      insertQuery = {
+        name: insertQueryName,
+        collection: collectionName,
+        filter: { _id: null },
+        options: {},
+        find_one: true
+      };
+      
+      output.application.queries.push(insertQuery);
+    }
+
+    var editQueryName = collectionName + "_selected";
+    var editQuery = getOutputQuery(editQueryName);
+    if(!editQuery) {
+      editQuery = {
+        name: editQueryName,
+        collection: collectionName,
+        filter: { _id: ":customerId" },
+        options: {},
+        find_one: true
+      };
+      
+      output.application.queries.push(editQuery);
+    }
+
+    var dataView = {
+      name: "list",
+      type: "dataview",
+      query_name: viewQueryName,
       insert_route: page.name + ".insert",
       edit_route: page.name + ".edit",
       edit_route_params: [{ name: "customerId", value: "this._id" }]
@@ -353,13 +402,7 @@ human2machine = function(input) {
       type: "form",
       mode: "insert",
       title: "Insert",
-      query: {
-        name: collectionName + "_empty",
-        collection: collectionName,
-        filter: { _id: null },
-        options: {},
-        find_one: true
-      },
+      query_name: insertQueryName,
       submit_route: page.name,
       cancel_route: page.name
     };
@@ -376,13 +419,7 @@ human2machine = function(input) {
       type: "form",
       mode: "update",
       title: "Edit",
-      query: {
-        name: collectionName + "_selected",
-        collection: collectionName,
-        filter: { _id: ":customerId" },
-        options: {},
-        find_one: true
-      },
+      query_name: editQueryName,
       submit_route: page.name,
       cancel_route: page.name
     };

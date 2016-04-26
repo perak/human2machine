@@ -54,7 +54,7 @@ Live application is <a href="http://generator-human-iot.meteor.com" target="_bla
 Syntax
 ------
 
-1. It's important to **finish each sentence with dot**. Newlines are not important and are ignored by parser.
+1. It's important to **finish each sentence with a dot**. Newlines are not important and are ignored by parser.
 2. To define a list you can say `4 pages` or `four pages`. After type name you can list element names after colon and separate items with comma: `three fields: name, address and e-mail`. If element names are not listed, they will be automatically named as type + item_index ("field0", "field1", "field2"). Exception is page names: "page0" will be named "home" and other pages: "page1", "page2"...
 3. To add component or text into page, say `in page_name page` (word between `in` and `page` is interpreted as page name). If you make a typo and page name is unknown - complete sentence is ignored.
 4. To define collection fields say `in collection_name collection` (word between `in` and `collection` is interpreted as collection name). If you make a typo and collection name is unknown - complete sentence is ignored.
