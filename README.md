@@ -35,7 +35,7 @@ In customers page I want CRUD for customers collection.
 In about page I want text: "This application is written in human language using Meteor Kitchen, code generator for Meteor".
 ```
 
-Live application is <a href="http://generator-human.meteor.com" target="_blank">here</a>.
+Live application is <a href="http://example-human.meteorfarm.com" target="_blank">here</a>.
 
 
 ### Example 2 - IoT
@@ -48,7 +48,7 @@ Connect sensors collection to mosquitto server: "test.mosquitto.org" and subscri
 In home page I want table showing sensors collection.
 ```
 
-Live application is <a href="http://generator-human-iot.meteor.com" target="_blank">here</a>.
+Live application is <a href="http://example-human-iot.meteorfarm.com" target="_blank">here</a>.
 
 
 Syntax

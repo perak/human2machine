@@ -1,6 +1,6 @@
 {
   "name": "human2machine",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "description": "Translates app description written in human language to meteor-kitchen input .json",
   "main": "human2machine.js",
   "scripts": {

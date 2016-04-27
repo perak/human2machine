@@ -17,7 +17,8 @@ human2machine = function(input) {
             ]
           }
         ]
-      }
+      },
+      packages: { meteor: [], npm: [] }
     }
   };
 
@@ -430,6 +431,42 @@ human2machine = function(input) {
     page.pages.push(editPage);
   };
 
+  var addPhotoblogToPage = function(sentence, page) {
+    var collectionName = getWordBetweenWords(sentence, "in", "collection");
+    if(!collectionName) {
+      var collectionName = getWordBetweenWords(sentence, "into", "collection");
+    }
+    if(!getOutputCollection(collectionName)) return;
+
+    var viewQueryName = collectionName;
+    var viewQuery = getOutputQuery(viewQueryName);
+    if(!viewQuery) {
+      viewQuery = {
+        name: viewQueryName,
+        collection: collectionName,
+        filter: {},
+        options: {}
+      };
+      
+      output.application.queries.push(viewQuery);
+    }
+
+    var photoBlog = {
+            name: "photo_blog",
+            type: "custom_component",
+            html: "<template name=\"TEMPLATE_NAME\">\n\t<p style=\"margin: 20px 0;\">\n\t\t<button type=\"button\" id=\"take-photo\" class=\"btn btn-danger\">\n\t\t\t<span class=\"fa fa-camera\"></span>\n\t\t\tTake a photo and share it!\n\t\t</button>\n\t</p>\n\n  \t<form>\n\t\t<div class=\"form-group\">\n\t\t\t<label for=\"text\">Or enter a note</label>\n\t\t\t<textarea class=\"form-control\" name=\"text\" rows=\"3\"></textarea>\n\t\t</div>\n\t\t<button type=\"submit\" class=\"btn btn-success\">Send</button>\n\t</form>\n  \n\t{{#each QUERY_VAR}}\n\t\t<div class=\"panel\" style=\"padding: 0 10px;\">\n\t\t\t{{#if photo}}\n\t\t\t\t<img src=\"{{photo}}\" alt=\"Loading image...\" style=\"margin-top: 10px; width: 100%; height: auto\">\n\t\t\t{{else}}\n\t\t\t\t<p>{{text}}</p>\n\t\t\t{{/if}}\n\t\t\t<p class=\"text-muted\">{{name}}, {{livestamp createdAt}}</p>\n\t\t</div>\n\t{{/each}}\n</template>\n",
+              js: "var cameraOptions = {\n\twidth: 800,\n\theight: 600\n};\n\n\nTemplate.TEMPLATE_NAME.events({\n\t\"submit form\": function(e, t) {\n\t\te.preventDefault();\n\t\tvar textArea = $(e.currentTarget).find(\"textarea\");\n\t\tif(!textArea.val()) {\n\t\t\treturn;\n\t\t}\n\t\tCOLLECTION_VAR.insert({\n\t\t\ttext: textArea.val()\n\t\t}, function(e, r) {\n\t\t\tif(e) {\n\t\t\t\talert(e);\n\t\t\t\treturn;\n\t\t\t}\n\t\t\ttextArea.val(\"\");\n\t\t});\n\t},\n\n\t\"click #take-photo\": function(e, t) {\n\t\tMeteorCamera.getPicture(cameraOptions, function (error, data) {\n\t\t\tif (error) {\n\t\t\t\tconsole.log(error.message);\n\t\t\t} else {\n\t\t\t\tCOLLECTION_VAR.insert({\n\t\t\t\t\tphoto: data\n\t\t\t\t});\n\t\t\t}\n\t\t});\n\t}\n});\n",
+      query_name: viewQueryName
+    }
+
+    page.components.push(photoBlog);
+
+    if(output.application.packages.meteor.indexOf("mdg:camera") < 0) {
+      output.application.packages.meteor.push("mdg:camera");
+    }
+
+  };
+
   var addComponentsToPage = function(sentence) {
       var pageName = getWordBetweenWords(sentence, "in", "page");
       if(!pageName) return;
@@ -449,8 +486,12 @@ human2machine = function(input) {
           if(findSubString(sentence, "crud") >= 0) {
               addCrudToPage(sentence, page);
           } else {
-            if(findSubString(sentence, "text") >= 0) {
-                page.text = getQuotedStringAfterSubString(sentence, "text");
+            if(findSubString(sentence, "photo blog") >= 0) {
+                addPhotoblogToPage(sentence, page);
+            } else {
+              if(findSubString(sentence, "text") >= 0) {
+                  page.text = getQuotedStringAfterSubString(sentence, "text");
+              }
             }
           }
         }
