@@ -445,7 +445,7 @@ human2machine = function(input) {
         name: viewQueryName,
         collection: collectionName,
         filter: {},
-        options: {}
+        options: { sort: { createdAt: -1 } }
       };
       
       output.application.queries.push(viewQuery);
