@@ -472,8 +472,15 @@ human2machine = function(input) {
       if(!pageName) return;
       var page = getOutputPage(pageName);
       if(!page) {
-        if(pageName == "home") page = getOutputPage("home_page");
-        if(!page) return;
+        if(pageName == "home") {
+          page = getOutputPage("home");
+          if(!page) {
+            page = getOutputPage("home_page");
+          }
+        }
+        if(!page) {
+          return;
+        }
       }
 
       // which component?
