@@ -1,7 +1,7 @@
 {
   "name": "human2machine",
-  "version": "1.1.3",
-  "description": "Translates app description written in human language to meteor-kitchen input .json",
+  "version": "1.1.4",
+  "description": "Translates app description written in English language to meteor-kitchen input .json",
   "main": "human2machine.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"

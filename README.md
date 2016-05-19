@@ -28,11 +28,11 @@ Example input files
 
 ```
 I want site with three pages: home, customers and about.
-In home page I want jumbotron with title: "This application is written in human language!", text: "Human to describe app, machine to write code!", button url: "customers".
+In home page I want jumbotron with title: "This application is written in English language!", text: "Human to describe app, machine to write code!", button url: "customers".
 Please create one collection: customers.
 In customers collection I want three fields: name, address and e-mail.
 In customers page I want CRUD for customers collection.
-In about page I want text: "This application is written in human language using Meteor Kitchen, code generator for Meteor".
+In about page I want text: "This application is written in English language using Meteor Kitchen, source code generator for Meteor".
 ```
 
 Live application is <a href="http://example-human.meteorfarm.com" target="_blank">here</a>.

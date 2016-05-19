@@ -332,7 +332,7 @@ human2machine = function(input) {
 
     var dataView = {
       name: "list",
-      type: "dataview",
+      type: "data_view",
       query_name: queryName
     };
 
@@ -386,7 +386,7 @@ human2machine = function(input) {
 
     var dataView = {
       name: "list",
-      type: "dataview",
+      type: "data_view",
       query_name: viewQueryName,
       insert_route: page.name + ".insert",
       edit_route: page.name + ".edit",
