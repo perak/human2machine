@@ -15,12 +15,15 @@
   ],
   "preferGlobal": "true",
   "bin": {
-    "human2machine" : "cli.js"
+    "human2machine": "cli.js"
   },
   "author": "Petar Korponaić <petar.korponaic@gmail.com> (http://perak.github.io/)",
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/perak/human2machine/issues"
   },
-  "homepage": "https://github.com/perak/human2machine"
+  "homepage": "https://github.com/perak/human2machine",
+  "dependencies": {
+    "underscore": "^1.12.1"
+  }
 }
